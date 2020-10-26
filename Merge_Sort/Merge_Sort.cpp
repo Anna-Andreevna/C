@@ -31,6 +31,7 @@ int merge_sort(int *init_arr, int left, int right) {
 	return 0;
 }
 
+
 int main() {
 	int size = 0;
 	int crutch = 0;
