@@ -31,29 +31,6 @@ int merge_sort(int *init_arr, int left, int right) {
 	return 0;
 }
 
-/*int main() {
-	int size;
-	int* arr;
-	scanf_s("%d", &size);
-	arr = (int*)malloc(size * sizeof(int));
-	if (arr == NULL) {
-		printf("Memory Error");
-		return 0;
-	}
-	for (int i = 0; i < size; i++)
-		scanf_s("%d", &arr[i]);
-	for (int i = 0; i < size; i++)
-		printf("%d ", arr[i]);
-	printf("\n");
-	int stat;
-	stat = merge_sort(arr, 0, size - 1);
-	if (stat != 0)
-		return 0;
-	for (int i = 0; i < size; i++)
-		printf("%d ", arr[i]);
-	free(arr);
-	return 0;
-}*/
 int main() {
 	int size = 0;
 	int crutch = 0;
@@ -121,15 +98,6 @@ int main() {
 				c = fgetc(f);
 			}
 		}
-		/*for (int i = 0; i < size; i++)
-			printf("%d ", arr[i]);
-		printf("\n");
-		int stat;
-		stat = merge_sort(arr, 0, size - 1);
-		if (stat != 0)
-			return 0;
-		for (int i = 0; i < size; i++)
-			printf("%d ", arr[i]);*/
 		fclose(f);
 	}
 
