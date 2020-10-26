@@ -1,0 +1,2 @@
+C:\Users\Анна\source\repos\Из_строки_в_число\Debug\Из_строки_в_число.exe
+C:\Users\Анна\source\repos\Из_строки_в_число\Debug\Из_строки_в_число.pdb
