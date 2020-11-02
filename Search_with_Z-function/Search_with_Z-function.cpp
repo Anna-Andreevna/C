@@ -12,26 +12,27 @@ void zfunction(int size, char* str, int* res) {
 	}
 }
 
-int search(int text_s, char* text, int patt_s, char* pattern, int* indexes) {
-	indexes = (int*)malloc(sizeof(int));
-	if (indexes == NULL) {
-		printf("Mamory error\n");
+int search(char* text, int text_s, char* pattern, int patt_s, int** p_ind) {
+	int* res = (int*)malloc(sizeof(int));
+	if (res == NULL) {
+		printf("Memory error\n");
 		return 1;
 	}
-	indexes[0] = 0;
-	if ((text == 0) || (patt_s == 0) || (text_s < patt_s)) {
+	res[0] = 0;
+	if ((text_s == 0) || (patt_s == 0) || (text_s < patt_s)) {
+		p_ind[0] = res;
 		return 0;
 	}
 	char* unit_str = (char*)malloc((text_s + patt_s + 1)*sizeof(char));
 	if (unit_str == NULL) {
-		printf("Mamory error\n");
-		free(indexes);
+		printf("Memory error\n");
+		free(res);
 		return 1;
 	}
 	int* zf = (int*)malloc((text_s + patt_s + 1) * sizeof(int));
 	if (zf == NULL) {
-		printf("Mamory error\n");
-		free(indexes);
+		printf("Memory error\n");
+		free(res);
 		free(unit_str);
 		return 1;
 	}
@@ -43,46 +44,44 @@ int search(int text_s, char* text, int patt_s, char* pattern, int* indexes) {
 	zfunction(text_s + patt_s + 1, unit_str, zf);
 	for (int i = patt_s + 1; i <= text_s + patt_s; i++) {
 		if (zf[i] == patt_s) {
-			indexes[0]++;
-			int* temp = (int*)realloc(indexes, indexes[0] + 1); /* вот тут перевыделяю*/
+			res[0]++;
+			int* temp = (int*)realloc(res, (res[0] + 1)*sizeof(int));
 			if (temp == NULL) {
-				printf("Mamory error\n");
-				free(indexes);
+				printf("Memory error\n");
+				free(res);
 				free(unit_str);
 				free(zf);
 				return 1;
 			}
-			indexes = temp; /* а здесь мусор оказывается */ 
-			int k = indexes[0];
-			indexes[k] = i;
+			res = temp;
+			int k = res[0];
+			res[k] = i - patt_s - 1;
 		}
 	}
 	free(unit_str);
 	free(zf);
+	p_ind[0] = res;
 	return 0;
 }
 
 int main() {
-	int p;
-	int* ind = &p;
-	char text[5][15] = {"asdasdasda"};
-	char patt[] = "sd";
-	int stat = search(10, text[0], 2, patt, ind);
-	if (stat == 0) {
-		assert(ind[0] == 3);
-		int temp[] = { 1, 4, 7 };
-		for (int i = 0; i < 3; i++) {
-			printf("%d", ind[i]);
-			assert(ind[i + 1] == temp[i]);
+	int* ind = NULL;
+	char text[5][15] = { "asdasdasda", "aaaaaaa", "", "ab", "ab" };
+	int t_s[5] = { 10, 7, 0, 2, 2 };
+	char patt[5][5] = { "sd", "aa", "", "c", "abc" };
+	int p_s[5] = { 2, 2, 0, 1, 3 };
+	int check[5][7] = { {3, 1, 4, 7}, {6, 0, 1, 2, 3, 4, 5}, {0}, {0}, {0} };
+	int stat;
+	for (int j = 0; j < 5; j++) {
+		stat = search(text[j], t_s[j], patt[j], p_s[j], &ind);
+		if (stat == 0) {
+			assert(ind[0] == check[j][0]);
+			for (int i = 1; i <= ind[0]; i++) {
+				printf("%d ", ind[i]);
+				assert(ind[i] == check[j][i]);
+			}
+			printf("\n");
 		}
+		free(ind);
 	}
-	/*char text[] = "aaaaa";
-	char patt[] = "aa";
-	int stat = search(5, text, 2, patt, ind);
-	if (stat == 0) {
-		assert(ind[0] == 4);
-		int temp[] = { 1, 2, 3, 4 };
-		for (int i = 0; i < 4; i++)
-			assert(ind[i + 1] == temp[i]);
-	}*/
 }
