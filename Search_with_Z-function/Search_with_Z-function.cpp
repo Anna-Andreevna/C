@@ -44,7 +44,7 @@ int search(int text_s, char* text, int patt_s, char* pattern, int* indexes) {
 	for (int i = patt_s + 1; i <= text_s + patt_s; i++) {
 		if (zf[i] == patt_s) {
 			indexes[0]++;
-			int* temp = (int*)realloc(indexes, indexes[0] + 1);
+			int* temp = (int*)realloc(indexes, indexes[0] + 1); /* вот тут перевыделяю*/
 			if (temp == NULL) {
 				printf("Mamory error\n");
 				free(indexes);
@@ -52,7 +52,7 @@ int search(int text_s, char* text, int patt_s, char* pattern, int* indexes) {
 				free(zf);
 				return 1;
 			}
-			indexes = temp;
+			indexes = temp; /* а здесь мусор оказывается */ 
 			int k = indexes[0];
 			indexes[k] = i;
 		}
