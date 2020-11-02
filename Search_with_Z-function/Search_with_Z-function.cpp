@@ -18,11 +18,11 @@ int search(int text_s, char* text, int patt_s, char* pattern, int* indexes) {
 		printf("Mamory error\n");
 		return 1;
 	}
-	*indexes = 0;
-	if ((text == 0) || (patt_s == 0)) {
+	indexes[0] = 0;
+	if ((text == 0) || (patt_s == 0) || (text_s < patt_s)) {
 		return 0;
 	}
-	char* unit_str = (char*)malloc(text_s + patt_s + 1);
+	char* unit_str = (char*)malloc((text_s + patt_s + 1)*sizeof(char));
 	if (unit_str == NULL) {
 		printf("Mamory error\n");
 		free(indexes);
@@ -35,11 +35,16 @@ int search(int text_s, char* text, int patt_s, char* pattern, int* indexes) {
 		free(unit_str);
 		return 1;
 	}
+	for (int i = 0; i < patt_s; i++)
+		unit_str[i] = pattern[i];
+	unit_str[patt_s] = '#';
+	for (int i = 0; i < text_s; i++)
+		unit_str[i + patt_s + 1] = text[i];
 	zfunction(text_s + patt_s + 1, unit_str, zf);
 	for (int i = patt_s + 1; i <= text_s + patt_s; i++) {
 		if (zf[i] == patt_s) {
 			indexes[0]++;
-			int* temp = (int*)realloc(indexes, indexes[0]);
+			int* temp = (int*)realloc(indexes, indexes[0] + 1);
 			if (temp == NULL) {
 				printf("Mamory error\n");
 				free(indexes);
@@ -48,24 +53,28 @@ int search(int text_s, char* text, int patt_s, char* pattern, int* indexes) {
 				return 1;
 			}
 			indexes = temp;
-			indexes[indexes[0]] = i;
+			int k = indexes[0];
+			indexes[k] = i;
 		}
 	}
 	free(unit_str);
 	free(zf);
+	return 0;
 }
 
 int main() {
 	int p;
 	int* ind = &p;
-	char text[] = "asdasdasda";
+	char text[5][15] = {"asdasdasda"};
 	char patt[] = "sd";
-	int stat = search(10, text, 2, patt, ind);
+	int stat = search(10, text[0], 2, patt, ind);
 	if (stat == 0) {
 		assert(ind[0] == 3);
 		int temp[] = { 1, 4, 7 };
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++) {
+			printf("%d", ind[i]);
 			assert(ind[i + 1] == temp[i]);
+		}
 	}
 	/*char text[] = "aaaaa";
 	char patt[] = "aa";
