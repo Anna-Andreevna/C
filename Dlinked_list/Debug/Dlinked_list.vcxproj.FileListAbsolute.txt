@@ -1,0 +1,2 @@
+C:\Users\Анна\source\repos\Dlinked_list\Debug\Dlinked_list.exe
+C:\Users\Анна\source\repos\Dlinked_list\Debug\Dlinked_list.pdb
