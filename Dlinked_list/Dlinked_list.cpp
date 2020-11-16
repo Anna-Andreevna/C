@@ -219,8 +219,7 @@ void dlist_clear(DList* pdl) {
 		p = p->next;
 		free(aux);
 	}
-	pdl->head = pdl->tail = NULL;
-	pdl->length = 0;
+	*pdl = { NULL, NULL, 0 };
 	return;
 }
 
@@ -277,6 +276,39 @@ void dlist_concat(DList* dl1, DList* dl2) {
 	return;
 }
 
+void dlist_foreach(DList dl, void (*pfun)(Node*)) {
+	Node* p = dl.head;
+	while (p != NULL) {
+		(*pfun)(p);
+		p = p->next;
+	}
+	return;
+}
+
+void dl_sqr(Node* n) {
+	n->cont = n->cont * n->cont;
+	return;
+}
+
+int dlist_find_custom(DList dl, int (*predicate)(Node*), float* ret_data) {
+	Node* p = dl.head;
+	int i = 0;
+	while ((p != NULL) && (predicate(p) != 1)) {
+		p = p->next;
+		i++;
+	}
+	if (p == NULL)
+		return -1;
+	*ret_data = p->cont;
+	return i;
+}
+
+int dl_pred(Node* n) {
+	if (n->cont == 9)
+		return 1;
+	return 0;
+}
+
 int main() {
 	DList dl;
 	dlist_create(&dl);
@@ -319,5 +351,8 @@ int main() {
 	dlist_concat(&dl, &dl1);
 	dlist_print(dl);
 	dlist_print(dl1);
+	dlist_foreach(dl, &dl_sqr);
+	dlist_print(dl);
+	printf("%f, %d\n", res, dlist_find_custom(dl, &dl_pred, &res));
 	return 0;
 }
