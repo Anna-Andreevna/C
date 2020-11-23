@@ -11,21 +11,6 @@ void dlist_create(DList* pdl) {
 	return;
 }
 
-/*void dlist_print(DList dl) {
-	Node* p = dl.head;
-	printf("DLinked_List [");
-	if (p != NULL) {
-		printf(" %f", (*p).cont);
-		p = (*p).next;
-	}
-	while (p != NULL) {
-		printf(", %f", (*p).cont);
-		p = (*p).next;
-	}
-	printf(" ]\n");
-	return;
-}*/
-
 int dlist_prepend(DList* pdl, void* cont_p, int cont_s) {
 	Node* n = (Node*)malloc(sizeof(Node));
 	if (n == NULL) {
@@ -33,14 +18,11 @@ int dlist_prepend(DList* pdl, void* cont_p, int cont_s) {
 		return 1;
 	}
 	*n = { cont_p, cont_s, NULL, (*pdl).head };
-	if ((*pdl).head == NULL) {
-		(*pdl).head = n;
+	if ((*pdl).head == NULL) 
 		(*pdl).tail = n;
-	}
-	else {
+	else
 		(*pdl).head->prev = n;
-		(*pdl).head = n;/**/
-	}
+	(*pdl).head = n;
 	(*pdl).length++;
 	return 0;
 }
@@ -52,14 +34,11 @@ int dlist_append(DList* pdl, void* cont_p, int cont_s) {
 		return 1;
 	}
 	*n = { cont_p, cont_s, (*pdl).tail, NULL };
-	if ((*pdl).tail == NULL) {
+	if ((*pdl).tail == NULL)
 		(*pdl).head = n;
-		(*pdl).tail = n;
-	}
-	else {
+	else
 		(*pdl).tail->next = n;
-		(*pdl).tail = n;/**/
-	}
+	(*pdl).tail = n;
 	(*pdl).length++;
 	return 0;
 }
@@ -468,11 +447,29 @@ void test_remove_first_and_all() {
 	return;
 }
 
+void dl_print_char(Node* n) {
+	printf("%c ", *(char*)(n->cont_pointer));
+	return;
+}
+
 int main() {
 	test_append();
 	test_insert();
 	test_prepend();
 	test_remove();
 	test_remove_first_and_all();
+	DList dl;
+	dlist_create(&dl);
+	char* simb;
+	for (int i = 65; i < 75; i++) {
+		simb = (char*)malloc(sizeof(char));
+		if (simb == NULL) {
+			dlist_clear(&dl);
+			break;
+		}
+		*simb = (char)i;
+		dlist_append(&dl, (void*)simb, sizeof(char));
+	}
+	dlist_foreach(dl, &dl_print_char);
 	return 0;
 }
