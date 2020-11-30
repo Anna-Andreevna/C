@@ -1,15 +1,24 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <assert.h>
 
-void zfunction(int size, char* str, int* res) {
-	res[0] = 0;
-	for (int i = 1; i < size; i++) {
-		int j = 0;
-		while ((i + j < size) && (str[i + j] == str[j]))
-			j++;
-		res[i] = j;
+void zfunction(int size, char* str, int* zf) {
+	zf[0] = 0;
+	int left = 0;
+	int right = 0;
+	for (int i = 1; i < size; i++){
+		zf[i] = 0;
+		zf[i] = (int)fmaxf(0, fminf(zf[i - left], right - i + 1));
+		/*в статье нет + 1, но если я не ошиблась, то её отсутствие создаёт одну бесполезную операцию сравнения*/
+		while ((i + zf[i] < size) && (str[i + zf[i]] == str[zf[i]]))
+			zf[i]++;
+		if (i + zf[i] > right) {
+			left = i;
+			right = i + zf[i] - 1;
+		}
 	}
+	return;
 }
 
 int search(char* text, int text_s, char* pattern, int patt_s, int** p_ind) {
