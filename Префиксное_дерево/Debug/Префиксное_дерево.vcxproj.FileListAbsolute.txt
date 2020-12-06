@@ -1,0 +1,2 @@
+C:\Users\Анна\source\repos\Префиксное_дерево\Debug\Префиксное_дерево.exe
+C:\Users\Анна\source\repos\Префиксное_дерево\Debug\Префиксное_дерево.pdb
